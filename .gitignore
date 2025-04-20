@@ -17,3 +17,13 @@ MarketOnline/CartService.Domain.Tests/bin/
 MarketOnline/CartService.Application/obj/
 MarketOnline/CartService.Application/bin/
 MarketOnline/.vs/
+MarketOnline/CartService.API/bin/
+MarketOnline/CartService.API/obj/
+MarketOnline/CatalogService.API/bin/
+MarketOnline/CatalogService.API/obj/
+MarketOnline/CatalogService.Infrastructura/bin/
+MarketOnline/CatalogService.Infrastructura/obj/
+MarketOnline/CatalogService.IntegrationTest/bin/
+MarketOnline/CatalogService.IntegrationTest/obj/
+MarketOnline/CatalogService.UnitTests/bin/
+MarketOnline/CatalogService.UnitTests/obj/

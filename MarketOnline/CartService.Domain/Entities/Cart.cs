@@ -1,43 +1,50 @@
-﻿using Common.Domain.Interfaces;
-
-namespace CartService.Domain.Entities
+﻿namespace CartService.Domain.Entities
 {
-	public class Cart : IEntity<Guid>
+	public class Cart
 	{
-		private readonly List<CartItem> _items = [];
-
 		public required Guid Id { get; set; }
 
-		public IReadOnlyCollection<CartItem> Items => _items.AsReadOnly();
+		public List<CartItem> Items { get; private set; } = [];
 
-		public void AddItem(CartItem cartItem)
+		public void AddOrUpdateItem(CartItem cartItem)
 		{
-			var existing = _items.FirstOrDefault(i => i.Id == cartItem.Id);
+			var existingIndex = Items.FindIndex(i => i.Id == cartItem.Id);
 
-			if (existing != null)
+			if (existingIndex != -1)
 			{
-				existing.Quantity += cartItem.Quantity;
+				Items[existingIndex] = cartItem;
 			}
 			else
 			{
-				_items.Add(cartItem);
+				Items.Add(cartItem);
 			}
 		}
 
-		public void RemoveItem(int id)
+		public void UpdateItemQuantity(int id, int quantity)
 		{
-			var item = _items.FirstOrDefault(i => i.Id == id);
+			var item = Items.FirstOrDefault(i => i.Id == id);
 
 			if (item == null) return;
 
-			if (item.Quantity > 1)
+			if (item.Quantity + quantity > 0)
 			{
-				item.Quantity--;
+				item.Quantity += quantity;
 			}
 			else
 			{
-				_items.Remove(item);
+				Items.Remove(item);
 			}
 		}
+
+		public void DeleteItem(int id)
+		{
+			var item = Items.FirstOrDefault(i => i.Id == id);
+
+			if (item != null)
+			{
+				Items.Remove(item);
+			}
+		}
+
 	}
 }

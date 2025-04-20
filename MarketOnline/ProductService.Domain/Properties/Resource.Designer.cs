@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProductService.Domain.Properties {
+namespace CatalogService.Domain.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ProductService.Domain.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ProductService.Domain.Properties.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CatalogService.Domain.Properties.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,33 @@ namespace ProductService.Domain.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name is too long..
+        /// </summary>
+        internal static string Category_Name_IsTooLong {
+            get {
+                return ResourceManager.GetString("Category_Name_IsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name must not be empty..
+        /// </summary>
+        internal static string Category_Name_MustBeNotEmpty {
+            get {
+                return ResourceManager.GetString("Category_Name_MustBeNotEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount cannot be less then zero..
+        /// </summary>
+        internal static string Product_Amount_MustBeEqualOrMoreThenZero {
+            get {
+                return ResourceManager.GetString("Product_Amount_MustBeEqualOrMoreThenZero", resourceCulture);
             }
         }
         

@@ -22,21 +22,21 @@ namespace CartService.Domain.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resource {
+    internal class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public Resource() {
+        internal Resource() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CartService.Domain.Properties.Resource", typeof(Resource).Assembly);
@@ -51,7 +51,7 @@ namespace CartService.Domain.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,18 @@ namespace CartService.Domain.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name must not be empty..
+        /// </summary>
+        internal static string CartItem_Name_MustBeNotEmpty {
+            get {
+                return ResourceManager.GetString("CartItem_Name_MustBeNotEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid decrease amount..
         /// </summary>
-        public static string CartItem_Quantity_InvalideDecreaseAmount {
+        internal static string CartItem_Quantity_InvalideDecreaseAmount {
             get {
                 return ResourceManager.GetString("CartItem_Quantity_InvalideDecreaseAmount", resourceCulture);
             }
@@ -72,7 +81,7 @@ namespace CartService.Domain.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Quantity must be greater than zero..
         /// </summary>
-        public static string CartItem_Quantity_MustBeGreaterZero {
+        internal static string CartItem_Quantity_MustBeGreaterZero {
             get {
                 return ResourceManager.GetString("CartItem_Quantity_MustBeGreaterZero", resourceCulture);
             }
@@ -81,7 +90,7 @@ namespace CartService.Domain.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Increase amount must be positive..
         /// </summary>
-        public static string CartItem_Quantity_MustBePositive {
+        internal static string CartItem_Quantity_MustBePositive {
             get {
                 return ResourceManager.GetString("CartItem_Quantity_MustBePositive", resourceCulture);
             }

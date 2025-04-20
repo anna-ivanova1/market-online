@@ -1,42 +1,93 @@
-﻿using CartService.Application.IntegrationTests.Mocks;
-using CartService.Application.Interfaces;
-using CartService.Domain.Entities;
+﻿using CartService.Domain.Entities;
 using CartService.Infrastructure.Data;
+using Common.Domain.ValueObjects;
 
-namespace CartService.Application.IntegrationTests.Service
+namespace CartService.IntegrationTests
 {
+	[TestFixture]
 	public class CartServiceIntegrationTests
 	{
-		private MockProductQueryService _productService;
-		private ICartRepository _cartRepository;
-		private Services.CartService _service;
+		private string _testDbPath;
+		private CartRepository _repository;
+		private API.Services.CartService _service;
 
 		[SetUp]
 		public void Setup()
 		{
-			_cartRepository = new CartRepository(":memory:");
-			_productService = new MockProductQueryService();
-			_service = new Services.CartService(_cartRepository, _productService);
+			_testDbPath = $"CartTest_{Guid.NewGuid()}.db";
+			_repository = new CartRepository(_testDbPath);
+			_service = new API.Services.CartService(_repository);
+		}
+
+		[TearDown]
+		public void Cleanup()
+		{
+			if (File.Exists(_testDbPath))
+			{
+				File.Delete(_testDbPath);
+			}
+		}
+
+		private CartItem CreateCartItem(int id, string name = "Test", int quantity = 1, double price = 10)
+		{
+			return new CartItem
+			{
+				Id = id,
+				Name = name,
+				Quantity = quantity,
+				Price = new Money(price, Common.Domain.Enums.Currency.USD)
+			};
 		}
 
 		[Test]
-		public void AddOrUpdate_SavesCartInLiteDB()
+		public void AddOrUpdateCartItem_ShouldInsertAndPersistItem()
 		{
 			var cartId = Guid.NewGuid();
-			var cart = new Cart
-			{
-				Id = cartId,
-			};
+			var item = CreateCartItem(1);
 
-			cart.AddItem(new CartItem { Id = 1, Quantity = 3 });
+			var updatedCart = _service.AddOrUpdateCartItem(cartId, item);
 
-			var result = _service.AddOrUpdate(cart);
+			Assert.That(updatedCart.Items.Count, Is.EqualTo(1));
 
-			var loadedCart = _cartRepository.Get(cartId);
-			Assert.NotNull(loadedCart);
-			Assert.That(loadedCart.Items.Count, Is.EqualTo(1));
-			Assert.That(loadedCart.Items.Where(_ => _.Id == 1).FirstOrDefault()?.Quantity, Is.EqualTo(3));
+			var fromDb = _repository.GetById(cartId);
+			Assert.That(fromDb, Is.Not.Null);
+			Assert.That(fromDb!.Items.First().Id, Is.EqualTo(1));
+		}
+
+		[Test]
+		public void Get_ShouldReturnNewCart_WhenCartDoesNotExist()
+		{
+			var cartId = Guid.NewGuid();
+			var cart = _service.Get(cartId);
+
+			Assert.That(cart.Id, Is.EqualTo(cartId));
+			Assert.That(cart.Items.Count, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void UpdateCartItemQuantity_ShouldIncreaseQuantity()
+		{
+			var cartId = Guid.NewGuid();
+			var item = CreateCartItem(2, quantity: 1);
+			_service.AddOrUpdateCartItem(cartId, item);
+
+			_service.UpdateCartItemQuantity(cartId, item.Id, 2);
+			var result = _repository.GetById(cartId);
+
+			Assert.That(result!.Items.First().Quantity, Is.EqualTo(3));
+		}
+
+		[Test]
+		public void UpdateCartItemQuantity_ShouldRemoveItem_WhenQuantityGoesToZero()
+		{
+			var cartId = Guid.NewGuid();
+			var item = CreateCartItem(3, quantity: 1);
+			_service.AddOrUpdateCartItem(cartId, item);
+
+			_service.UpdateCartItemQuantity(cartId, item.Id, -1);
+			var result = _repository.GetById(cartId);
+
+			Assert.That(result, Is.Null);
 		}
 	}
-
 }

@@ -126,4 +126,7 @@
   <data name="CartItem_Quantity_InvalideDecreaseAmount" xml:space="preserve">
     <value>Invalid decrease amount.</value>
   </data>
+  <data name="CartItem_Name_MustBeNotEmpty" xml:space="preserve">
+    <value>Name must not be empty.</value>
+  </data>
 </root>

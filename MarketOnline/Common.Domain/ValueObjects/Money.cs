@@ -2,7 +2,7 @@
 
 namespace Common.Domain.ValueObjects
 {
-	public struct Money(double amount, Currency currency) : IEquatable<Money>
+	public struct Money(double amount, Currency currency) : IEquatable<Money>, ICloneable
 	{
 		public double Amount { get; } = amount;
 
@@ -13,5 +13,10 @@ namespace Common.Domain.ValueObjects
 		public readonly bool Equals(Money other) => Amount == other.Amount && Currency == other.Currency;
 
 		public override readonly int GetHashCode() => HashCode.Combine(Amount, Currency);
+
+		public object Clone()
+		{
+			return new Money(Amount, Currency);
+		}
 	}
 }
