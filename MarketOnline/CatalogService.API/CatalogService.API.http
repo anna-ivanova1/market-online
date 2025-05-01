@@ -1,0 +1,6 @@
+@CatalogService.API_HostAddress = http://localhost:5240
+
+GET {{CatalogService.API_HostAddress}}/catalogservice/
+Accept: application/json
+
+###
