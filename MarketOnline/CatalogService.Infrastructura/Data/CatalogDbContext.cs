@@ -12,5 +12,20 @@ namespace CatalogService.Infrastructure.Data
 		public CatalogDbContext(DbContextOptions options) : base(options)
 		{
 		}
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			optionsBuilder.UseInMemoryDatabase("CatalogDb");
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<Product>()
+				.HasKey(b => b.Id);
+
+
+			modelBuilder.Entity<Category>()
+				.HasKey(b => b.Id);
+		}
 	}
 }

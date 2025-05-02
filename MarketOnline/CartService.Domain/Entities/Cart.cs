@@ -20,31 +20,34 @@
 			}
 		}
 
-		public void UpdateItemQuantity(int id, int quantity)
+		public int UpdateItemQuantity(int id, int quantity)
 		{
 			var item = Items.FirstOrDefault(i => i.Id == id);
 
-			if (item == null) return;
+			if (item == null) return 0;
 
 			if (item.Quantity + quantity > 0)
 			{
 				item.Quantity += quantity;
+				return item.Quantity;
 			}
 			else
 			{
 				Items.Remove(item);
+				return 0;
 			}
 		}
 
-		public void DeleteItem(int id)
+		public bool DeleteItem(int id)
 		{
 			var item = Items.FirstOrDefault(i => i.Id == id);
 
 			if (item != null)
 			{
 				Items.Remove(item);
+				return true;
 			}
+			return false;
 		}
-
 	}
 }

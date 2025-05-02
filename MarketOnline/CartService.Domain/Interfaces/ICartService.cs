@@ -10,6 +10,6 @@ namespace CartService.Domain.Interfaces
 
 		Cart UpdateCartItemQuantity(Guid id, int itemId, int quantity);
 
-		void DeleteCartItem(Guid id, int itemId);
+		bool DeleteCartItem(Guid id, int itemId);
 	}
 }

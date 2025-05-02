@@ -4,12 +4,12 @@
 	{
 		public Task<T> Get(K id);
 
-		public IEnumerable<T> List();
+		public IQueryable<T> List();
 
 		public Task<K> Add(T item);
 
 		public Task Update(T item);
 
-		public Task Delete(K id);
+		public Task<bool> Delete(K id);
 	}
 }

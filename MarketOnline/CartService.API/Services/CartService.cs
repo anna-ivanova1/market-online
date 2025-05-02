@@ -11,8 +11,6 @@ namespace CartService.API.Services
 		{
 			var existingCart = _cartRepository.GetById(id) ?? new Cart() { Id = id };
 
-			var existingCartItem = existingCart.Items.FirstOrDefault(_ => _.Id == item.Id);
-
 			existingCart.AddOrUpdateItem(item);
 
 			_cartRepository.Upsert(existingCart);
@@ -20,14 +18,18 @@ namespace CartService.API.Services
 			return existingCart;
 		}
 
-		public void DeleteCartItem(Guid id, int itemId)
+		public bool DeleteCartItem(Guid id, int itemId)
 		{
 			var existingCart = _cartRepository.GetById(id);
 
-			if (existingCart != null)
+			var result = existingCart != null ? existingCart.DeleteItem(itemId) : false;
+
+			if (result)
 			{
-				existingCart.DeleteItem(itemId);
+				_cartRepository.Upsert(existingCart);
 			}
+
+			return result;
 		}
 
 		public Cart Get(Guid id)

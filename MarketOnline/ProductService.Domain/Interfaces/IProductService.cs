@@ -6,12 +6,12 @@ namespace CatalogService.Domain.Interfaces
 	{
 		public Task<Product> Get(int id);
 
-		public IEnumerable<Product> List();
+		public IEnumerable<Product> List(Guid categoryId, int page, int pageSize);
 
-		public Task<int> Add(Product product);
+		public Task<Product> Add(Product product);
 
-		public void Update(Product product);
+		public Task<Product> Update(Product product);
 
-		public void Delete(int id);
+		public Task<bool> Delete(int id);
 	}
 }
