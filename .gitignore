@@ -27,3 +27,9 @@ MarketOnline/CatalogService.IntegrationTest/bin/
 MarketOnline/CatalogService.IntegrationTest/obj/
 MarketOnline/CatalogService.UnitTests/bin/
 MarketOnline/CatalogService.UnitTests/obj/
+MarketOnline/CartService.APITests/bin/Debug/net8.0/appsettings.Development.json
+MarketOnline/CartService.APITests/bin/
+MarketOnline/CartService.APITests/obj/CartService.APITests.csproj.nuget.dgspec.json
+MarketOnline/CartService.APITests/obj/
+MarketOnline/CatalogService.APITests/bin/
+MarketOnline/CatalogService.APITests/obj/
