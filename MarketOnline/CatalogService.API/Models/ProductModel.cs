@@ -1,6 +1,4 @@
-﻿using Common.Domain.ValueObjects;
-
-namespace CatalogService.API.Models
+﻿namespace CatalogService.API.Models
 {
 	public class ProductModel
 	{
@@ -12,7 +10,7 @@ namespace CatalogService.API.Models
 
 		public int Id { get; init; }
 
-		public required Money Price { get; set; }
+		public required MoneyModel Price { get; set; }
 
 		public required Guid CategoryId { get; set; }
 

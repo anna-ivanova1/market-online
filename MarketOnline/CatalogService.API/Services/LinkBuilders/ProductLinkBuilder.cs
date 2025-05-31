@@ -19,7 +19,11 @@ namespace CatalogService.API.Services.LinkBuilders
 		{
 			var httpContext = _httpContextAccessor.HttpContext!;
 
-			var links = new List<LinkModel>
+			if (model == null)
+			{
+				return;
+			}
+			model.Links = new List<LinkModel>
 			{
 				new()
 				{

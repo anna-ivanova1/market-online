@@ -1,5 +1,6 @@
 ﻿using CatalogService.Domain.Entities;
 using CatalogService.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Infrastructure.Data
 {
@@ -7,9 +8,9 @@ namespace CatalogService.Infrastructure.Data
 	{
 		private readonly CatalogDbContext _context;
 
-		public CategoryRepository(CatalogDbContext constext)
+		public CategoryRepository(CatalogDbContext context)
 		{
-			_context = constext;
+			_context = context;
 		}
 
 		public async Task<Guid> Add(Category item)
@@ -40,7 +41,7 @@ namespace CatalogService.Infrastructure.Data
 
 		public async Task<Category> Get(Guid id)
 		{
-			return await _context.Categories.FindAsync([id]);
+			return await _context.Categories.Include(_ => _.Parent).Where(_ => _.Id == id).FirstAsync();
 		}
 
 		public IQueryable<Category> List()

@@ -1,6 +1,6 @@
 ﻿using CartService.Domain.Entities;
+using Common.Domain.Entities;
 using Common.Domain.Enums;
-using Common.Domain.ValueObjects;
 
 namespace CartService.Tests.Domain.Entities
 {
@@ -13,7 +13,7 @@ namespace CartService.Tests.Domain.Entities
 			{
 				Id = id,
 				Name = name,
-				Price = new Money(price, Currency.USD),
+				Price = new Money() { Amount = price, Currency = Currency.USD },
 				Quantity = quantity
 			};
 		}

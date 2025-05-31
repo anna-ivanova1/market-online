@@ -24,6 +24,8 @@ namespace CatalogService.Domain.Entities
 
 		public Uri? Image { get; set; }
 
+		public Guid? ParentId { get; set; }
+
 		public Category? Parent { get; set; }
 
 		public void CopyTo(Category target)

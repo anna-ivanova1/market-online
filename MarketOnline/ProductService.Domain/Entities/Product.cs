@@ -1,5 +1,4 @@
 ﻿using CatalogService.Domain.Interfaces;
-using Common.Domain.ValueObjects;
 
 namespace CatalogService.Domain.Entities
 {
@@ -29,6 +28,8 @@ namespace CatalogService.Domain.Entities
 		public int Id { get; init; }
 
 		public required Money Price { get; set; }
+
+		public required Guid CategoryId { get; set; }
 
 		public required Category Category { get; set; }
 
