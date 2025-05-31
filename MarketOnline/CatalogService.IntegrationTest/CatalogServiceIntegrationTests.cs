@@ -17,6 +17,7 @@ namespace CatalogService.IntegrationTest
 		{
 			private CatalogDbContext _dbContext;
 			private IProductRepository _repository;
+			private ICategoryRepository _categoryRepository;
 			private IProductService _service;
 
 			private static Guid categoryId = Guid.Parse("70dfc6f9-2616-4515-be2f-c708a7569e6c");
@@ -30,7 +31,8 @@ namespace CatalogService.IntegrationTest
 
 				_dbContext = new CatalogDbContext(options);
 				_repository = new ProductRepository(_dbContext);
-				_service = new ProductService(_repository);
+				_categoryRepository = new CategoryRepository(_dbContext);
+				_service = new ProductService(_repository, _categoryRepository);
 
 				var existingCategory = _dbContext.Categories.Find(categoryId);
 				if (existingCategory == null)
@@ -103,8 +105,6 @@ namespace CatalogService.IntegrationTest
 				Assert.IsNull(result);
 			}
 
-
-
 			private Product CreateTestProduct(string name)
 			{
 				var category = _dbContext.Categories.Find(categoryId);
@@ -113,8 +113,9 @@ namespace CatalogService.IntegrationTest
 				{
 					Name = name,
 					Description = "Description",
-					Price = new Common.Domain.ValueObjects.Money(10.5, Currency.EUR),
+					Price = new Money() { Amount = 10.5, Currency = Currency.EUR },
 					Category = category,
+					CategoryId = categoryId,
 					Amount = 5
 				};
 			}

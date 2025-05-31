@@ -1,6 +1,7 @@
 ﻿using CartService.Domain.Entities;
 using CartService.Infrastructure.Data;
-using Common.Domain.ValueObjects;
+using Common.Domain.Entities;
+using Common.Domain.Enums;
 
 namespace CartService.IntegrationTests
 {
@@ -35,7 +36,7 @@ namespace CartService.IntegrationTests
 				Id = id,
 				Name = name,
 				Quantity = quantity,
-				Price = new Money(price, Common.Domain.Enums.Currency.USD)
+				Price = new Money() { Amount = price, Currency = Currency.USD },
 			};
 		}
 

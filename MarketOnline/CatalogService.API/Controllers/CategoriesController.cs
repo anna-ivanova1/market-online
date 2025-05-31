@@ -26,9 +26,16 @@ namespace CatalogService.API.Controllers
 		}
 
 		[HttpGet("{id}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesDefaultResponseType]
 		public async Task<ActionResult<CategoryModel>> GetById(Guid id)
 		{
 			var result = await _service.Get(id);
+			if (result == null)
+			{
+				return NotFound();
+			}
 			return Ok(_mapper.Map<CategoryModel>(result));
 		}
 

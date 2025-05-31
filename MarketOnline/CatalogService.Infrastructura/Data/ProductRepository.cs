@@ -1,5 +1,6 @@
 ﻿using CatalogService.Domain.Entities;
 using CatalogService.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Infrastructure.Data
 {
@@ -42,7 +43,7 @@ namespace CatalogService.Infrastructure.Data
 
 		public IQueryable<Product> List()
 		{
-			return _context.Products.AsQueryable();
+			return _context.Products.Include(p => p.Category).AsQueryable();
 		}
 
 		public async Task Update(Product item)

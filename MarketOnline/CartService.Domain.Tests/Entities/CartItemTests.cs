@@ -1,7 +1,6 @@
 ﻿using CartService.Domain.Entities;
 using Common.Domain.Entities;
 using Common.Domain.Enums;
-using Common.Domain.ValueObjects;
 
 namespace CartService.Tests.Domain.Entities
 {
@@ -11,7 +10,12 @@ namespace CartService.Tests.Domain.Entities
 		[Test]
 		public void Should_Create_CartItem_With_Valid_Data()
 		{
-			var money = new Money(10, Currency.EUR);
+			var money = new Money()
+			{
+				Amount = 10,
+				Currency = Currency.EUR,
+			};
+
 			var cartItem = new CartItem
 			{
 				Id = 1,
@@ -33,7 +37,7 @@ namespace CartService.Tests.Domain.Entities
 			var cartItem = new CartItem
 			{
 				Id = 2,
-				Price = new Money(5, Currency.USD),
+				Price = new Money() { Amount = 5, Currency = Currency.USD },
 				Quantity = 1,
 				Name = "Name"
 			};
@@ -49,7 +53,7 @@ namespace CartService.Tests.Domain.Entities
 			{
 				Id = 3,
 				Name = "Another Item",
-				Price = new Money(20, Currency.USD)
+				Price = new Money() { Amount = 20, Currency = Currency.USD }
 			};
 
 			var ex = Assert.Throws<ArgumentException>(() => cartItem.Quantity = -1);
@@ -63,7 +67,7 @@ namespace CartService.Tests.Domain.Entities
 			{
 				Id = 4,
 				Name = "Old Name",
-				Price = new Money(15, Currency.USD),
+				Price = new Money() { Amount = 15, Currency = Currency.USD },
 				Quantity = 3
 			};
 
@@ -87,7 +91,7 @@ namespace CartService.Tests.Domain.Entities
 			{
 				Id = 5,
 				Name = "Item with Image",
-				Price = new Money(30, Currency.EUR),
+				Price = new Money() { Amount = 30, Currency = Currency.EUR },
 				Quantity = 1,
 				Image = image
 			};
@@ -100,8 +104,8 @@ namespace CartService.Tests.Domain.Entities
 		[Test]
 		public void Money_Equals_Should_Return_True_For_Same_Values()
 		{
-			var m1 = new Money(9.99, Currency.EUR);
-			var m2 = new Money(9.99, Currency.EUR);
+			var m1 = new Money() { Amount = 9.99, Currency = Currency.EUR };
+			var m2 = new Money() { Amount = 9.99, Currency = Currency.EUR };
 
 			Assert.IsTrue(m1.Equals(m2));
 		}
@@ -109,9 +113,9 @@ namespace CartService.Tests.Domain.Entities
 		[Test]
 		public void Money_Equals_Should_Return_False_For_Different_Values()
 		{
-			var m1 = new Money(9.99, Currency.EUR);
-			var m2 = new Money(9.99, Currency.USD);
-			var m3 = new Money(10.00, Currency.EUR);
+			var m1 = new Money() { Amount = 9.99, Currency = Currency.EUR };
+			var m2 = new Money() { Amount = 9.99, Currency = Currency.USD };
+			var m3 = new Money() { Amount = 10.00, Currency = Currency.EUR };
 
 			Assert.IsFalse(m1.Equals(m2));
 			Assert.IsFalse(m1.Equals(m3));
@@ -120,7 +124,7 @@ namespace CartService.Tests.Domain.Entities
 		[Test]
 		public void Money_ToString_Should_Format_Correctly()
 		{
-			var money = new Money(42.5, Currency.USD);
+			var money = new Money() { Amount = 42.5, Currency = Currency.USD };
 			Assert.That(money.ToString(), Is.EqualTo("42.50 USD"));
 		}
 	}

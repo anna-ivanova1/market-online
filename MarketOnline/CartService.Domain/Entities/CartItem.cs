@@ -1,5 +1,4 @@
 ﻿using Common.Domain.Entities;
-using Common.Domain.ValueObjects;
 
 namespace CartService.Domain.Entities
 {

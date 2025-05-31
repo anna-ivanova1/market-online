@@ -1,7 +1,6 @@
 ﻿namespace CatalogService.UnitTests.Entities
 {
 	using Common.Domain.Enums;
-	using Common.Domain.ValueObjects;
 	using global::CatalogService.Domain.Entities;
 	using NUnit.Framework;
 	using System;
@@ -10,10 +9,9 @@
 	{
 		public class ProductTests
 		{
-
 			private Category GetSampleCategory() => new() { Id = Guid.NewGuid(), Name = "Sample Category" };
 
-			private Money GetSamplePrice() => new(9.99, Currency.EUR);
+			private Money GetSamplePrice() => new Money() { Amount = 9.99, Currency = Currency.EUR };
 
 			[Test]
 			public void Name_SetValidValue_ShouldSucceed()
@@ -51,6 +49,7 @@
 			[Test]
 			public void CopyTo_ShouldCopyAllProperties()
 			{
+				var category = GetSampleCategory();
 				var source = new Product
 				{
 					Id = 1,
@@ -58,7 +57,8 @@
 					Description = "A gaming laptop",
 					Image = new Uri("http://example.com/laptop.png"),
 					Price = GetSamplePrice(),
-					Category = GetSampleCategory(),
+					CategoryId = category.Id,
+					Category = category,
 					Amount = 5
 				};
 
@@ -67,7 +67,8 @@
 					Id = 2, // won't be changed
 					Name = "Old",
 					Price = GetSamplePrice(),
-					Category = GetSampleCategory(),
+					CategoryId = category.Id,
+					Category = category,
 					Amount = 1
 				};
 
@@ -97,6 +98,7 @@
 					Image = new Uri("http://example.com/phone.png"),
 					Price = price,
 					Category = category,
+					CategoryId = category.Id,
 					Amount = 10
 				};
 
@@ -108,6 +110,7 @@
 					Image = new Uri("http://example.com/phone.png"),
 					Price = price,
 					Category = category,
+					CategoryId = category.Id,
 					Amount = 10
 				};
 
@@ -143,6 +146,7 @@
 					Image = new Uri("http://example.com/image.png"),
 					Price = price,
 					Category = category,
+					CategoryId = category.Id,
 					Amount = 3
 				};
 
@@ -154,21 +158,27 @@
 					Image = new Uri("http://example.com/image.png"),
 					Price = price,
 					Category = category,
+					CategoryId = category.Id,
 					Amount = 3
 				};
 
 				Assert.AreEqual(p1.GetHashCode(), p2.GetHashCode());
 			}
 
-			private Product CreateValidProduct() => new()
+			private Product CreateValidProduct()
 			{
-				Id = 1,
-				Name = "Product",
-				Description = "Test",
-				Price = GetSamplePrice(),
-				Category = GetSampleCategory(),
-				Amount = 1
-			};
+				var category = GetSampleCategory();
+				return new Product
+				{
+					Id = 1,
+					Name = "Product",
+					Description = "Test",
+					Price = GetSamplePrice(),
+					Category = category,
+					CategoryId = category.Id,
+					Amount = 1
+				};
+			}
 		}
 	}
 

@@ -2,7 +2,6 @@
 using CartService.API.Models;
 using CartService.Domain.Entities;
 using Common.Domain.Entities;
-using Common.Domain.ValueObjects;
 
 namespace CartService.API
 {
