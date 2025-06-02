@@ -30,6 +30,18 @@ namespace CartService.API.Controllers.v1
 		}
 
 		/// <summary>
+		/// Retrieves all carts
+		/// </summary>
+		/// <returns>The collection of carts</returns>
+		[MapToApiVersion("1.0")]
+		[HttpGet]
+		public ActionResult<IEnumerable<CartModel>> Get()
+		{
+			var carts = _cartService.List();
+			return Ok(carts.Select(_mapper.Map<CartModel>));
+		}
+
+		/// <summary>
 		/// Retrieves a cart by its ID. Creates a new cart if none exists with the provided ID.
 		/// </summary>
 		/// <param name="cartId">Cart ID in GUID format.</param>

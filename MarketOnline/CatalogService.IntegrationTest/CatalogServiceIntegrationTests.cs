@@ -5,6 +5,7 @@ namespace CatalogService.IntegrationTest
 	using global::CatalogService.Domain.Entities;
 	using global::CatalogService.Domain.Interfaces;
 	using global::CatalogService.Infrastructure.Data;
+	using global::CatalogService.Infrastructure.Publishers;
 	using Microsoft.EntityFrameworkCore;
 	using NUnit.Framework;
 	using System;
@@ -19,6 +20,7 @@ namespace CatalogService.IntegrationTest
 			private IProductRepository _repository;
 			private ICategoryRepository _categoryRepository;
 			private IProductService _service;
+			private IProductUpdatePublisher _updatePublisher;
 
 			private static Guid categoryId = Guid.Parse("70dfc6f9-2616-4515-be2f-c708a7569e6c");
 
@@ -32,7 +34,8 @@ namespace CatalogService.IntegrationTest
 				_dbContext = new CatalogDbContext(options);
 				_repository = new ProductRepository(_dbContext);
 				_categoryRepository = new CategoryRepository(_dbContext);
-				_service = new ProductService(_repository, _categoryRepository);
+				_updatePublisher = new ProductUpdatePublisher();
+				_service = new ProductService(_repository, _categoryRepository, _updatePublisher);
 
 				var existingCategory = _dbContext.Categories.Find(categoryId);
 				if (existingCategory == null)
