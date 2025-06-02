@@ -3,6 +3,7 @@ using CatalogService.API.Services;
 using CatalogService.API.Services.LinkBuilders;
 using CatalogService.Domain.Interfaces;
 using CatalogService.Infrastructure.Data;
+using CatalogService.Infrastructure.Publishers;
 using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.API
@@ -22,6 +23,7 @@ namespace CatalogService.API
 			builder.Services.AddScoped<IProductService, ProductService>();
 			builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
+			builder.Services.AddScoped<IProductUpdatePublisher, ProductUpdatePublisher>();
 		}
 	}
 }

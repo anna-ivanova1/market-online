@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using CartService.API;
+using CartService.API.Services;
 using CartService.API.Swagger;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 Bootstrapper.ConfigureContainer(builder);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddHostedService<ProductUpdateBackgroundService>();
 
 // Add services to the container.
 

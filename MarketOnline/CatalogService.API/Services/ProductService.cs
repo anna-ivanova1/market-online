@@ -1,5 +1,6 @@
 ﻿using CatalogService.Domain.Entities;
 using CatalogService.Domain.Interfaces;
+using CatalogService.Domain.Messages;
 
 namespace CatalogService.API.Services
 {
@@ -7,11 +8,15 @@ namespace CatalogService.API.Services
 	{
 		private readonly IProductRepository _productRepository;
 		private readonly ICategoryRepository _categoryRepository;
+		private readonly IProductUpdatePublisher _productUpdatePublisher;
 
-		public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
+		public ProductService(IProductRepository productRepository,
+			ICategoryRepository categoryRepository,
+			IProductUpdatePublisher productUpdatePublisher)
 		{
 			_productRepository = productRepository;
 			_categoryRepository = categoryRepository;
+			_productUpdatePublisher = productUpdatePublisher;
 		}
 
 		public async Task<Product> Add(Product product)
@@ -47,6 +52,10 @@ namespace CatalogService.API.Services
 		public async Task<Product> Update(Product product)
 		{
 			await _productRepository.Update(product);
+
+			var message = new ProductUpdateMessage { Id = product.Id, Name = product.Name, Price = product.Price };
+
+			await _productUpdatePublisher.PublishProductUpdate(message);
 
 			return await _productRepository.Get(product.Id);
 		}
