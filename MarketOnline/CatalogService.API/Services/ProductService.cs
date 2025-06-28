@@ -6,20 +6,25 @@ namespace CatalogService.API.Services
 	public class ProductService : IProductService
 	{
 		private readonly IProductRepository _productRepository;
+		private readonly ICategoryRepository _categoryRepository;
 
-		public ProductService(IProductRepository productRepository)
+		public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
 		{
 			_productRepository = productRepository;
+			_categoryRepository = categoryRepository;
 		}
 
-		public async Task<int> Add(Product product)
+		public async Task<Product> Add(Product product)
 		{
-			return await _productRepository.Add(product);
+			var category = await _categoryRepository.Get(product.CategoryId);
+			product.Category = category;
+			var id = await _productRepository.Add(product);
+			return await _productRepository.Get(id);
 		}
 
-		public void Delete(int id)
+		public async Task<bool> Delete(int id)
 		{
-			_productRepository?.Delete(id);
+			return await _productRepository.Delete(id);
 		}
 
 		public async Task<Product> Get(int id)
@@ -27,14 +32,23 @@ namespace CatalogService.API.Services
 			return await _productRepository.Get(id);
 		}
 
-		public IEnumerable<Product> List()
+		public IEnumerable<Product> List(Guid categoryId, int page, int pageSize)
 		{
-			return _productRepository.List();
+			var skip = pageSize * (page == 1 ? 0 : page--);
+			var products = _productRepository
+				.List().ToList();
+			return products
+				.Where(_ => _.CategoryId == categoryId)
+				.OrderBy(_ => _.Name)
+				.Skip(skip)
+				.Take(pageSize);
 		}
 
-		public void Update(Product product)
+		public async Task<Product> Update(Product product)
 		{
-			_productRepository.Update(product);
+			await _productRepository.Update(product);
+
+			return await _productRepository.Get(product.Id);
 		}
 	}
 }

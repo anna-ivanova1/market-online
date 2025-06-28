@@ -8,11 +8,11 @@ namespace CatalogService.Domain.Interfaces
 
 		public IEnumerable<Category> List();
 
-		public Task<Guid> Add(Category category);
+		public Task<Category> Add(Category category);
 
-		public void Update(Category category);
+		public Task<Category> Update(Category category);
 
-		public void Delete(Guid id);
+		public Task<bool> Delete(Guid id);
 
 	}
 }

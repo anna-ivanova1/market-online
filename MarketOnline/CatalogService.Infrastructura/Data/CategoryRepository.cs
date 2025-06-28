@@ -1,5 +1,6 @@
 ﻿using CatalogService.Domain.Entities;
 using CatalogService.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Infrastructure.Data
 {
@@ -7,9 +8,9 @@ namespace CatalogService.Infrastructure.Data
 	{
 		private readonly CatalogDbContext _context;
 
-		public CategoryRepository(CatalogDbContext constext)
+		public CategoryRepository(CatalogDbContext context)
 		{
-			_context = constext;
+			_context = context;
 		}
 
 		public async Task<Guid> Add(Category item)
@@ -21,24 +22,29 @@ namespace CatalogService.Infrastructure.Data
 			return item.Id;
 		}
 
-		public async Task Delete(Guid id)
+		public async Task<bool> Delete(Guid id)
 		{
 			var entity = await _context.Categories.FindAsync([id]);
 
 			if (entity != null)
 			{
+				var products = _context.Products.Where(_ => _.Category.Id == id);
+				_context.Products.RemoveRange(products);
+
 				_context.Categories.Remove(entity);
 
 				await _context.SaveChangesAsync();
+				return true;
 			}
+			return false;
 		}
 
 		public async Task<Category> Get(Guid id)
 		{
-			return await _context.Categories.FindAsync([id]);
+			return await _context.Categories.Include(_ => _.Parent).Where(_ => _.Id == id).FirstAsync();
 		}
 
-		public IEnumerable<Category> List()
+		public IQueryable<Category> List()
 		{
 			return _context.Categories.AsQueryable();
 		}
@@ -47,12 +53,11 @@ namespace CatalogService.Infrastructure.Data
 		{
 			var entity = await _context.Categories.FindAsync([item.Id]);
 
-			if (entity != null)
-			{
-				item.CopyTo(entity);
+			if (entity == null) return;
 
-				await _context.SaveChangesAsync();
-			}
+			item.CopyTo(entity);
+
+			await _context.SaveChangesAsync();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using CatalogService.Domain.Entities;
 using CatalogService.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Infrastructure.Data
 {
@@ -21,7 +22,7 @@ namespace CatalogService.Infrastructure.Data
 			return item.Id;
 		}
 
-		public async Task Delete(int id)
+		public async Task<bool> Delete(int id)
 		{
 			var entity = await _context.Products.FindAsync([id]);
 
@@ -30,7 +31,9 @@ namespace CatalogService.Infrastructure.Data
 				_context.Products.Remove(entity);
 
 				await _context.SaveChangesAsync();
+				return true;
 			}
+			return false;
 		}
 
 		public async Task<Product> Get(int id)
@@ -38,21 +41,20 @@ namespace CatalogService.Infrastructure.Data
 			return await _context.Products.FindAsync([id]);
 		}
 
-		public IEnumerable<Product> List()
+		public IQueryable<Product> List()
 		{
-			return _context.Products.AsQueryable();
+			return _context.Products.Include(p => p.Category).AsQueryable();
 		}
 
 		public async Task Update(Product item)
 		{
 			var entity = await _context.Products.FindAsync([item.Id]);
 
-			if (entity != null)
-			{
-				item.CopyTo(entity);
+			if (entity == null) return;
 
-				await _context.SaveChangesAsync();
-			}
+			item.CopyTo(entity);
+
+			await _context.SaveChangesAsync();
 		}
 	}
 }

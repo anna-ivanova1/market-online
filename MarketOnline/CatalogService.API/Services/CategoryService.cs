@@ -6,19 +6,21 @@ namespace CatalogService.API.Services
 	public class CategoryService : ICategoryService
 	{
 		private readonly ICategoryRepository _repository;
+
 		public CategoryService(ICategoryRepository repository)
 		{
 			_repository = repository;
 		}
 
-		public async Task<Guid> Add(Category category)
+		public async Task<Category> Add(Category category)
 		{
-			return await _repository.Add(category);
+			var id = await _repository.Add(category);
+			return await _repository.Get(id);
 		}
 
-		public void Delete(Guid id)
+		public async Task<bool> Delete(Guid id)
 		{
-			_repository.Delete(id);
+			return await _repository.Delete(id);
 		}
 
 		public async Task<Category> Get(Guid id)
@@ -31,9 +33,11 @@ namespace CatalogService.API.Services
 			return _repository.List();
 		}
 
-		public void Update(Category category)
+		public async Task<Category> Update(Category category)
 		{
-			_repository.Update(category);
+			await _repository.Update(category);
+
+			return await _repository.Get(category.Id);
 		}
 	}
 }
