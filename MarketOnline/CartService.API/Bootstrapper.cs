@@ -1,4 +1,5 @@
-﻿using CartService.Domain.Interfaces;
+﻿using CartService.API.Listeners;
+using CartService.Domain.Interfaces;
 using CartService.Infrastructure.Data;
 
 namespace CartService.API
@@ -9,6 +10,10 @@ namespace CartService.API
 		{
 			builder.Services.AddScoped<ICartRepository, CartRepository>();
 			builder.Services.AddScoped<ICartService, Services.CartService>();
+			builder.Services.AddSingleton<IProductUpdateListener, ProductUpdateListener>();
+
+
+
 		}
 	}
 }
