@@ -7,6 +7,11 @@ namespace CartService.API.Services
 	{
 		private readonly ICartRepository _cartRepository = cartRepository;
 
+		public IEnumerable<Cart> List()
+		{
+			return _cartRepository.List();
+		}
+
 		public Cart AddOrUpdateCartItem(Guid id, CartItem item)
 		{
 			var existingCart = _cartRepository.GetById(id) ?? new Cart() { Id = id };
@@ -64,6 +69,11 @@ namespace CartService.API.Services
 			}
 
 			return existingCart;
+		}
+
+		public void UpdateCartItems(int id, string name, Money price)
+		{
+			_cartRepository.UpdateCartItems(id, name, price);
 		}
 	}
 }
