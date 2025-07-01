@@ -35,9 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.UnitTests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.IntegrationTest", "CatalogService.IntegrationTest\CatalogService.IntegrationTest.csproj", "{D75CA413-FCC8-4B64-9B62-F17B1C7249C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartService.APITests", "CartService.APITests\CartService.APITests.csproj", "{17327806-5016-4A18-ADD2-432E50EFE714}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartService.APITests", "CartService.APITests\CartService.APITests.csproj", "{17327806-5016-4A18-ADD2-432E50EFE714}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.APITests", "CatalogService.APITests\CatalogService.APITests.csproj", "{7207AFE2-34DE-49F2-B850-022CCE73E175}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.APITests", "CatalogService.APITests\CatalogService.APITests.csproj", "{7207AFE2-34DE-49F2-B850-022CCE73E175}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
