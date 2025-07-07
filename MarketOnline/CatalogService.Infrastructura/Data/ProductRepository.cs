@@ -1,5 +1,6 @@
 ﻿using CatalogService.Domain.Entities;
 using CatalogService.Domain.Interfaces;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Infrastructure.Data
@@ -36,7 +37,7 @@ namespace CatalogService.Infrastructure.Data
 			return false;
 		}
 
-		public async Task<Product> Get(int id)
+		public async Task<Product?> Get(int id)
 		{
 			return await _context.Products.FindAsync([id]);
 		}

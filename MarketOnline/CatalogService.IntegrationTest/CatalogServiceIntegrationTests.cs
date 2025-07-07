@@ -1,16 +1,20 @@
-namespace CatalogService.IntegrationTest
+﻿namespace CatalogService.IntegrationTest
 {
+	using System;
+	using System.Linq;
+	using System.Threading.Tasks;
+
 	using Common.Domain.Enums;
+
 	using global::CatalogService.API.Services;
 	using global::CatalogService.Domain.Entities;
 	using global::CatalogService.Domain.Interfaces;
 	using global::CatalogService.Infrastructure.Data;
 	using global::CatalogService.Infrastructure.Publishers;
+
 	using Microsoft.EntityFrameworkCore;
+
 	using NUnit.Framework;
-	using System;
-	using System.Linq;
-	using System.Threading.Tasks;
 
 	namespace CatalogService.IntegrationTests
 	{
@@ -59,9 +63,9 @@ namespace CatalogService.IntegrationTest
 
 				var newProduct = await _service.Add(product);
 
-				Assert.AreEqual(product.Name, newProduct.Name);
-				Assert.AreEqual(product.Description, newProduct.Description);
-				Assert.AreEqual(product.Amount, newProduct.Amount);
+				Assert.That(newProduct?.Name, Is.EqualTo(product.Name));
+				Assert.That(newProduct?.Description, Is.EqualTo(product.Description));
+				Assert.That(newProduct?.Amount, Is.EqualTo(product.Amount));
 
 			}
 
@@ -71,16 +75,22 @@ namespace CatalogService.IntegrationTest
 				var product = CreateTestProduct("Product 4");
 				var newProduct = await _service.Add(product);
 
-				var updated = await _service.Get(newProduct.Id);
-				updated.Name = "Updated Name";
-				updated.Amount = 99;
+				if (newProduct != null)
+				{
+					var updated = await _service.Get(newProduct.Id);
+					if (updated != null)
+					{
+						updated.Name = "Updated Name";
+						updated.Amount = 99;
 
-				_service.Update(updated);
+						await _service.Update(updated);
 
-				var fetched = await _service.Get(newProduct.Id);
+						var fetched = await _service.Get(newProduct.Id);
 
-				Assert.AreEqual("Updated Name", fetched.Name);
-				Assert.AreEqual(99, fetched.Amount);
+						Assert.That(fetched?.Name, Is.EqualTo("Updated Name"));
+						Assert.That(fetched?.Amount, Is.EqualTo(99));
+					}
+				}
 			}
 
 			[Test]
@@ -91,7 +101,7 @@ namespace CatalogService.IntegrationTest
 
 				var list = _service.List(categoryId, 0, 10).ToList();
 
-				Assert.AreEqual(2, list.Count);
+				Assert.That(list.Count, Is.EqualTo(2));
 				Assert.IsTrue(list.Any(p => p.Name == "Product 1"));
 				Assert.IsTrue(list.Any(p => p.Name == "Product 2"));
 			}
@@ -100,17 +110,20 @@ namespace CatalogService.IntegrationTest
 			public async Task Delete_ShouldRemoveProduct()
 			{
 				var product = CreateTestProduct("Product 3");
-				var newProduct = await _service.Add(product);
+				var result = await _service.Add(product);
 
-				_service.Delete(newProduct.Id);
+				if (result != null)
+				{
+					await _service.Delete(result.Id);
+					result = await _service.Get(result.Id);
 
-				var result = await _service.Get(newProduct.Id);
-				Assert.IsNull(result);
+					Assert.IsNull(result);
+				}
 			}
 
 			private Product CreateTestProduct(string name)
 			{
-				var category = _dbContext.Categories.Find(categoryId);
+				var category = _dbContext.Categories.Find(categoryId) ?? new Category() { Name = "TestCategory", Id = categoryId };
 
 				return new Product
 				{

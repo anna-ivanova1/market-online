@@ -2,7 +2,7 @@
 {
 	public interface IRepository<T, K> where T : class
 	{
-		public Task<T> Get(K id);
+		public Task<T?> Get(K id);
 
 		public IQueryable<T> List();
 
