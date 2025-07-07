@@ -2,13 +2,23 @@
 
 namespace CartService.Domain.Entities
 {
-	public class Money : IEquatable<Money>
+	public sealed class Money : IEquatable<Money>
 	{
 		public double Amount { get; set; }
 
 		public Currency Currency { get; set; }
 
 		public override string ToString() => $"{Amount:0.00} {Currency}";
+
+		public override bool Equals(object? obj)
+		{
+			if (obj == null) return false;
+			if (!(obj is Money moneyObj)) return false;
+
+
+			return moneyObj.Amount == Amount && moneyObj.Currency == Currency;
+		}
+
 
 		public bool Equals(Money? other)
 		{

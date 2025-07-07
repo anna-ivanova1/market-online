@@ -1,9 +1,12 @@
 ﻿namespace CatalogService.UnitTests.Entities
 {
-	using Common.Domain.Enums;
-	using global::CatalogService.Domain.Entities;
-	using NUnit.Framework;
 	using System;
+
+	using Common.Domain.Enums;
+
+	using global::CatalogService.Domain.Entities;
+
+	using NUnit.Framework;
 
 	namespace CatalogService.Tests.Domain.Entities
 	{
@@ -18,7 +21,7 @@
 			{
 				var product = CreateValidProduct();
 				product.Name = "Notebook";
-				Assert.AreEqual("Notebook", product.Name);
+				Assert.That(product.Name, Is.EqualTo("Notebook"));
 			}
 
 			[Test]
@@ -74,13 +77,13 @@
 
 				source.CopyTo(target);
 
-				Assert.AreEqual(source.Name, target.Name);
-				Assert.AreEqual(source.Description, target.Description);
-				Assert.AreEqual(source.Image, target.Image);
-				Assert.AreEqual(source.Price, target.Price);
-				Assert.AreEqual(source.Category, target.Category);
-				Assert.AreEqual(source.Amount, target.Amount);
-				Assert.AreNotEqual(source.Id, target.Id); // init-only property remains unchanged
+				Assert.That(target.Name, Is.EqualTo(source.Name));
+				Assert.That(target.Description, Is.EqualTo(source.Description));
+				Assert.That(target.Image, Is.EqualTo(source.Image));
+				Assert.That(target.Price, Is.EqualTo(source.Price));
+				Assert.That(target.Category, Is.EqualTo(source.Category));
+				Assert.That(target.Amount, Is.EqualTo(source.Amount));
+				Assert.That(target.Id, Is.Not.EqualTo(source.Id)); // init-only property remains unchanged
 			}
 
 			[Test]
@@ -162,7 +165,7 @@
 					Amount = 3
 				};
 
-				Assert.AreEqual(p1.GetHashCode(), p2.GetHashCode());
+				Assert.That(p2.GetHashCode(), Is.EqualTo(p1.GetHashCode()));
 			}
 
 			private Product CreateValidProduct()

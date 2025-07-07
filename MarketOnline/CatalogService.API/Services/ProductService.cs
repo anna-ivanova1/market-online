@@ -19,10 +19,13 @@ namespace CatalogService.API.Services
 			_productUpdatePublisher = productUpdatePublisher;
 		}
 
-		public async Task<Product> Add(Product product)
+		public async Task<Product?> Add(Product product)
 		{
 			var category = await _categoryRepository.Get(product.CategoryId);
-			product.Category = category;
+			if (category != null)
+			{
+				product.Category = category;
+			}
 			var id = await _productRepository.Add(product);
 			return await _productRepository.Get(id);
 		}
@@ -32,14 +35,14 @@ namespace CatalogService.API.Services
 			return await _productRepository.Delete(id);
 		}
 
-		public async Task<Product> Get(int id)
+		public async Task<Product?> Get(int id)
 		{
 			return await _productRepository.Get(id);
 		}
 
 		public IEnumerable<Product> List(Guid categoryId, int page, int pageSize)
 		{
-			var skip = pageSize * (page == 1 ? 0 : page--);
+			var skip = pageSize * (page == 1 ? 0 : page - 1);
 			var products = _productRepository
 				.List().ToList();
 			return products
@@ -49,7 +52,7 @@ namespace CatalogService.API.Services
 				.Take(pageSize);
 		}
 
-		public async Task<Product> Update(Product product)
+		public async Task<Product?> Update(Product product)
 		{
 			await _productRepository.Update(product);
 
