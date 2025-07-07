@@ -1,129 +1,151 @@
-using Asp.Versioning;
-using CartService.API;
-using CartService.API.Middleware;
-using CartService.API.Services;
-using CartService.API.Swagger;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using System.Security.Claims;
 
+using Asp.Versioning;
 
-var builder = WebApplication.CreateBuilder(args);
+using CartService.API.Middleware;
+using CartService.API.Services;
+using CartService.API.Swagger;
 
-builder.Services.AddAuthentication(options =>
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace CartService.API
 {
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.Authority = "http://localhost:8080/realms/market-online";
-    options.RequireHttpsMetadata = false;
-    options.Audience = "market-online";
+	/// <summary>
+	/// Program method
+	/// </summary>
+	public class Program
+	{
+		/// <summary>
+		/// protected constructor 
+		/// </summary>
+		protected Program() { }
 
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        NameClaimType = "preferred_username",
-        RoleClaimType = ClaimTypes.Role,
-        ValidateAudience = true,
-        ValidAudience = "market-online",
-        ValidateIssuer = true,
-        ValidIssuer = "http://localhost:8080/realms/market-online",
-    };
-});
+		/// <summary>
+		/// Main method of the Program
+		/// </summary>
+		/// <param name="args">args</param>
+		public static void Main(string[] args)
+		{
+			var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthorization();
+			builder.Services.AddAuthentication(options =>
+			{
+				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+			})
+			.AddJwtBearer(options =>
+			{
+				options.Authority = "http://localhost:8080/realms/market-online";
+				options.RequireHttpsMetadata = false;
+				options.Audience = "market-online";
 
-Bootstrapper.ConfigureContainer(builder);
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddHostedService<ProductUpdateBackgroundService>();
+				options.TokenValidationParameters = new TokenValidationParameters
+				{
+					NameClaimType = "preferred_username",
+					RoleClaimType = ClaimTypes.Role,
+					ValidateAudience = true,
+					ValidAudience = "market-online",
+					ValidateIssuer = true,
+					ValidIssuer = "http://localhost:8080/realms/market-online",
+				};
+			});
 
-// Add services to the container.
+			builder.Services.AddAuthorization();
 
-builder.Services.AddControllers();
+			Bootstrapper.ConfigureContainer(builder);
+			builder.Services.AddAutoMapper(typeof(MappingProfile));
+			builder.Services.AddHostedService<ProductUpdateBackgroundService>();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(
-options =>
-{
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+			// Add services to the container.
 
-builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-builder.Services.AddSwaggerGen(options =>
-{
-    // Add a custom operation filter which sets default values
-    options.OperationFilter<SwaggerDefaultValues>();
-    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Use JWT token"
-    });
+			builder.Services.AddControllers();
 
-    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
+			builder.Services.AddEndpointsApiExplorer();
+			builder.Services.AddSwaggerGen(
+			options =>
+			{
+				var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+				options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+			});
 
-builder.Services.AddApiVersioning(options =>
-{
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.DefaultApiVersion = new ApiVersion(1, 0);
-    options.ReportApiVersions = true;
-    options.ApiVersionReader = new UrlSegmentApiVersionReader();
-});
+			builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+			builder.Services.AddSwaggerGen(options =>
+			{
+				// Add a custom operation filter which sets default values
+				options.OperationFilter<SwaggerDefaultValues>();
+				options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+				{
+					Name = "Authorization",
+					Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+					Scheme = "Bearer",
+					BearerFormat = "JWT",
+					In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+					Description = "Use JWT token"
+				});
 
-builder.Services
-    .AddApiVersioning()
-    .AddApiExplorer(options =>
-    {
-        options.GroupNameFormat = "'v'VVV";
-        options.SubstituteApiVersionInUrl = true;
-    });
+				options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+		{
+		{
+			new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+			{
+				Reference = new Microsoft.OpenApi.Models.OpenApiReference
+				{
+					Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+					Id = "Bearer"
+				}
+			},
+			Array.Empty<string>()
+		}
+		});
+			});
 
-var app = builder.Build();
+			builder.Services.AddApiVersioning(options =>
+			{
+				options.AssumeDefaultVersionWhenUnspecified = true;
+				options.DefaultApiVersion = new ApiVersion(1, 0);
+				options.ReportApiVersions = true;
+				options.ApiVersionReader = new UrlSegmentApiVersionReader();
+			});
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        var descriptions = app.DescribeApiVersions();
+			builder.Services
+				.AddApiVersioning()
+				.AddApiExplorer(options =>
+				{
+					options.GroupNameFormat = "'v'VVV";
+					options.SubstituteApiVersionInUrl = true;
+				});
 
-        foreach (var description in descriptions)
-        {
-            var url = $"/swagger/{description.GroupName}/swagger.json";
-            var name = description.GroupName.ToUpperInvariant();
-            options.SwaggerEndpoint(url, name);
-        }
-    });
+			var app = builder.Build();
+
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseSwagger();
+				app.UseSwaggerUI(options =>
+				{
+					var descriptions = app.DescribeApiVersions();
+
+					foreach (var description in descriptions)
+					{
+						var url = $"/swagger/{description.GroupName}/swagger.json";
+						var name = description.GroupName.ToUpperInvariant();
+						options.SwaggerEndpoint(url, name);
+					}
+				});
+			}
+
+			app.UseHttpsRedirection();
+
+			app.UseAuthentication();
+			app.UseAuthorization();
+			app.UseMiddleware<LogAccessTokenMiddleware>();
+			app.MapControllers();
+
+			app.Run();
+
+		}
+	}
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseMiddleware<LogAccessTokenMiddleware>();
-app.MapControllers();
-
-app.Run();
-
-public partial class Program { }

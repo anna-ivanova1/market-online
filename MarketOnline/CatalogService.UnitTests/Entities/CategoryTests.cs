@@ -1,8 +1,10 @@
-namespace CatalogService.UnitTests.Entities
+﻿namespace CatalogService.UnitTests.Entities
 {
-	using global::CatalogService.Domain.Entities;
-	using NUnit.Framework;
 	using System;
+
+	using global::CatalogService.Domain.Entities;
+
+	using NUnit.Framework;
 
 	namespace CatalogService.Tests.Domain.Entities
 	{
@@ -12,7 +14,7 @@ namespace CatalogService.UnitTests.Entities
 			public void Name_SetValidValue_ShouldSetSuccessfully()
 			{
 				var category = new Category { Name = "Electronics" };
-				Assert.AreEqual("Electronics", category.Name);
+				Assert.That(category.Name, Is.EqualTo("Electronics"));
 			}
 
 			[Test]
@@ -48,10 +50,10 @@ namespace CatalogService.UnitTests.Entities
 
 				source.CopyTo(target);
 
-				Assert.AreEqual(source.Id, target.Id);
-				Assert.AreEqual(source.Name, target.Name);
-				Assert.AreEqual(source.Image, target.Image);
-				Assert.AreEqual(source.Parent, target.Parent);
+				Assert.That(target.Id, Is.EqualTo(source.Id));
+				Assert.That(target.Name, Is.EqualTo(source.Name));
+				Assert.That(target.Image, Is.EqualTo(source.Image));
+				Assert.That(target.Parent, Is.EqualTo(source.Parent));
 			}
 
 			[Test]
@@ -109,7 +111,7 @@ namespace CatalogService.UnitTests.Entities
 				var category1 = new Category { Id = id, Name = "Books" };
 				var category2 = new Category { Id = id, Name = "Books" };
 
-				Assert.AreEqual(category1.GetHashCode(), category2.GetHashCode());
+				Assert.That(category2.GetHashCode(), Is.EqualTo(category1.GetHashCode()));
 			}
 		}
 	}

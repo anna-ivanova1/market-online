@@ -1,5 +1,6 @@
 ﻿using CartService.Domain.Entities;
 using CartService.Domain.Interfaces;
+
 using LiteDB;
 
 namespace CartService.Infrastructure.Data
@@ -8,9 +9,17 @@ namespace CartService.Infrastructure.Data
 	{
 		private readonly string _databasePath;
 
-		public CartRepository(string databasePath = "C:/temp/CartData.db")
+		public CartRepository(string? databasePath = null)
 		{
-			_databasePath = databasePath;
+			if (!string.IsNullOrEmpty(databasePath))
+			{
+
+				_databasePath = databasePath;
+			}
+			else
+			{
+				_databasePath = Path.Combine(Directory.GetCurrentDirectory(), "CartData.db");
+			}
 		}
 
 		public IEnumerable<Cart> List()

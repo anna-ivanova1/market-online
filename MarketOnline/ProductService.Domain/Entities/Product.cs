@@ -2,7 +2,7 @@
 
 namespace CatalogService.Domain.Entities
 {
-	public class Product : ICopyable<Product>, IEquatable<Product>
+	public sealed class Product : ICopyable<Product>, IEquatable<Product>
 	{
 		private const int MAX_LENGTH_NAME = 50;
 

@@ -12,7 +12,7 @@ namespace CatalogService.API.Services
 			_repository = repository;
 		}
 
-		public async Task<Category> Add(Category category)
+		public async Task<Category?> Add(Category category)
 		{
 			var id = await _repository.Add(category);
 			return await _repository.Get(id);
@@ -23,7 +23,7 @@ namespace CatalogService.API.Services
 			return await _repository.Delete(id);
 		}
 
-		public async Task<Category> Get(Guid id)
+		public async Task<Category?> Get(Guid id)
 		{
 			return await _repository.Get(id);
 		}
@@ -33,7 +33,7 @@ namespace CatalogService.API.Services
 			return _repository.List();
 		}
 
-		public async Task<Category> Update(Category category)
+		public async Task<Category?> Update(Category category)
 		{
 			await _repository.Update(category);
 
