@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
+
 using CatalogService.API.Models;
 using CatalogService.Domain.Entities;
 
-namespace CatalogService.API
+namespace CatalogService.API;
+
+public class MappingProfile : Profile
 {
-	public class MappingProfile : Profile
-	{
-		public MappingProfile()
-		{
-			CreateMap<Money, MoneyModel>().ReverseMap();
-			CreateMap<Category, CategoryModel>()
-				.ForMember(dest => dest.ParentId, rule => rule.MapFrom(src => src.Parent != null ? src.Parent.Id : (Guid?)null));
+    public MappingProfile()
+    {
+        CreateMap<Money, MoneyModel>().ReverseMap();
+        CreateMap<Category, CategoryModel>()
+            .ForMember(dest => dest.ParentId, rule => rule.MapFrom(src => src.Parent != null ? src.Parent.Id : (Guid?)null));
 
-			CreateMap<CategoryModel, Category>();
+        CreateMap<CategoryModel, Category>();
 
-			CreateMap<Product, ProductModel>().ReverseMap();
-		}
-	}
+        CreateMap<Product, ProductModel>().ReverseMap();
+    }
 }
