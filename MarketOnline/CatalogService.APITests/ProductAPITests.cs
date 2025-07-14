@@ -1,6 +1,7 @@
-﻿using CatalogService.API.Models;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
+
+using CatalogService.API.Models;
 
 namespace CatalogService.APITests
 {
@@ -33,7 +34,7 @@ namespace CatalogService.APITests
 			{
 				var response = await _client.GetAsync($"/api/catalog-service/products?categoryId={Category_ID}&pageNumber=1&pageSize=5");
 
-				Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+				Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 				var products = await response.Content.ReadFromJsonAsync<List<ProductModel>>();
 				Assert.IsNotNull(products);
 				Assert.IsEmpty(products);
@@ -43,27 +44,27 @@ namespace CatalogService.APITests
 			public async Task Post_And_GetById_WorksCorrectly()
 			{
 				var newCategory = GetCategory();
-				_client.PostAsJsonAsync("/api/catalog-service/categories", newCategory);
+				await _client.PostAsJsonAsync("/api/catalog-service/categories", newCategory);
 
 				var newProduct = GetProduct();
 
 				var post = await _client.PostAsJsonAsync("/api/catalog-service/products", newProduct);
-				Assert.AreEqual(HttpStatusCode.OK, post.StatusCode);
+				Assert.That(post.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
 				var created = await post.Content.ReadFromJsonAsync<ProductModel>();
 				Assert.IsNotNull(created);
-				Assert.AreEqual("New Product", created.Name);
+				Assert.That(created.Name, Is.EqualTo("New Product"));
 
 				var get = await _client.GetAsync($"/api/catalog-service/products/{created.Id}");
-				Assert.AreEqual(HttpStatusCode.OK, get.StatusCode);
+				Assert.That(get.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
 				var fetched = await get.Content.ReadFromJsonAsync<ProductModel>();
 				Assert.IsNotNull(fetched);
-				Assert.AreEqual(created.Id, fetched.Id);
+				Assert.That(fetched.Id, Is.EqualTo(created.Id));
 
 				var deleteResponce = await _client.DeleteAsync($"/api/catalog-service/products/{created.Id}");
 
-				Assert.AreEqual(HttpStatusCode.OK, deleteResponce.StatusCode);
+				Assert.That(deleteResponce.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 			}
 
 			private CategoryModel GetCategory()

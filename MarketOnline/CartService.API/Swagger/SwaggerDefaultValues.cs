@@ -1,13 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using System.Text.Json;
+
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.OpenApi.Models;
+
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Text.Json;
 
 namespace CartService.API.Swagger
 {
+	/// <summary>
+	/// Applies default values to Swagger operations, particularly useful when using API versioning.
+	/// </summary>
 	public class SwaggerDefaultValues : IOperationFilter
 	{
+		/// <summary>
+		/// Applies default values to the specified Swagger operation.
+		/// </summary>
+		/// <param name="operation">The Swagger <see cref="OpenApiOperation"/> to apply modifications to.</param>
+		/// <param name="context">The current <see cref="OperationFilterContext"/> providing metadata about the API operation.</param>
 		public void Apply(OpenApiOperation operation, OperationFilterContext context)
 		{
 			var apiDescription = context.ApiDescription;

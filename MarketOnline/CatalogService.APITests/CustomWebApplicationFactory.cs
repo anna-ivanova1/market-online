@@ -1,6 +1,8 @@
-﻿using CatalogService.API.Services;
+﻿using CatalogService.API;
+using CatalogService.API.Services;
 using CatalogService.Domain.Interfaces;
 using CatalogService.Infrastructure.Data;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;

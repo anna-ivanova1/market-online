@@ -1,9 +1,11 @@
+﻿
+using System.Net.Http.Json;
+using System.Text.Json;
+
+using CartService.API.Models;
+
 namespace CartService.APITests
 {
-	using CartService.API.Models;
-	using NUnit.Framework;
-	using System.Net.Http.Json;
-	using System.Text.Json;
 
 	[TestFixture]
 	public class CartControllerV2Tests
@@ -49,9 +51,9 @@ namespace CartService.APITests
 			});
 
 			Assert.IsNotNull(items);
-			Assert.AreEqual(1, items.Count);
-			Assert.AreEqual(3, items[0].Id);
-			Assert.AreEqual(5, items[0].Quantity);
+			Assert.That(items.Count, Is.EqualTo(1));
+			Assert.That(items[0].Id, Is.EqualTo(3));
+			Assert.That(items[0].Quantity, Is.EqualTo(5));
 
 			var responseDelete = await _client.DeleteAsync($"/api/v2/Cart/{cartId}/items/{item.Id}");
 
@@ -68,7 +70,7 @@ namespace CartService.APITests
 			});
 
 			Assert.IsNotNull(items2);
-			Assert.AreEqual(0, items2.Count);
+			Assert.That(items2.Count, Is.EqualTo(0));
 		}
 
 		[Test]
@@ -83,5 +85,4 @@ namespace CartService.APITests
 			Assert.That(response.IsSuccessStatusCode);
 		}
 	}
-
 }

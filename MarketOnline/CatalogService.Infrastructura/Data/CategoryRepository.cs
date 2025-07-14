@@ -1,5 +1,6 @@
 ﻿using CatalogService.Domain.Entities;
 using CatalogService.Domain.Interfaces;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Infrastructure.Data
@@ -39,7 +40,7 @@ namespace CatalogService.Infrastructure.Data
 			return false;
 		}
 
-		public async Task<Category> Get(Guid id)
+		public async Task<Category?> Get(Guid id)
 		{
 			return await _context.Categories.Include(_ => _.Parent).Where(_ => _.Id == id).FirstAsync();
 		}

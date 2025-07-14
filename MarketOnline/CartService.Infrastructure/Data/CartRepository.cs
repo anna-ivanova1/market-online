@@ -1,65 +1,73 @@
 ﻿using CartService.Domain.Entities;
 using CartService.Domain.Interfaces;
+
 using LiteDB;
 
-namespace CartService.Infrastructure.Data
+namespace CartService.Infrastructure.Data;
+
+public class CartRepository : ICartRepository
 {
-	public class CartRepository : ICartRepository
-	{
-		private readonly string _databasePath;
+    private readonly string _databasePath;
 
-		public CartRepository(string databasePath = "C:/temp/CartData.db")
-		{
-			_databasePath = databasePath;
-		}
+    public CartRepository(string? databasePath = null)
+    {
+        if (!string.IsNullOrEmpty(databasePath))
+        {
 
-		public IEnumerable<Cart> List()
-		{
-			using var db = new LiteDatabase(_databasePath);
-			var collection = db.GetCollection<Cart>("carts");
-			return collection.FindAll().ToList();
-		}
+            _databasePath = databasePath;
+        }
+        else
+        {
+            _databasePath = Path.Combine(Directory.GetCurrentDirectory(), "CartData.db");
+        }
+    }
 
-		public void Upsert(Cart cart)
-		{
-			using var db = new LiteDatabase(_databasePath);
-			var collection = db.GetCollection<Cart>("carts");
-			collection.Upsert(cart);
-		}
+    public IEnumerable<Cart> List()
+    {
+        using var db = new LiteDatabase(_databasePath);
+        var collection = db.GetCollection<Cart>("carts");
+        return collection.FindAll().ToList();
+    }
 
-		public Cart? GetById(Guid id)
-		{
-			using var db = new LiteDatabase(_databasePath);
-			var collection = db.GetCollection<Cart>("carts");
-			return collection.FindById(id);
-		}
+    public void Upsert(Cart cart)
+    {
+        using var db = new LiteDatabase(_databasePath);
+        var collection = db.GetCollection<Cart>("carts");
+        collection.Upsert(cart);
+    }
 
-		public bool Delete(Guid id)
-		{
-			using var db = new LiteDatabase(_databasePath);
-			var collection = db.GetCollection<Cart>("carts");
-			return collection.Delete(id);
-		}
+    public Cart? GetById(Guid id)
+    {
+        using var db = new LiteDatabase(_databasePath);
+        var collection = db.GetCollection<Cart>("carts");
+        return collection.FindById(id);
+    }
 
-		public void UpdateCartItems(int id, string name, Money price)
-		{
-			using var db = new LiteDatabase(_databasePath);
-			var collection = db.GetCollection<Cart>("carts");
-			var cartsToUpdate = collection.Find(_ => _.Items.Select(item => item.Id).Any(itemId => itemId == id));
+    public bool Delete(Guid id)
+    {
+        using var db = new LiteDatabase(_databasePath);
+        var collection = db.GetCollection<Cart>("carts");
+        return collection.Delete(id);
+    }
 
-			foreach (var cart in cartsToUpdate)
-			{
-				cart.Items.ForEach(item =>
-				{
-					if (item.Id == id)
-					{
-						item.Price = price;
-						item.Name = name;
+    public void UpdateCartItems(int id, string name, Money price)
+    {
+        using var db = new LiteDatabase(_databasePath);
+        var collection = db.GetCollection<Cart>("carts");
+        var cartsToUpdate = collection.Find(_ => _.Items.Select(item => item.Id).Any(itemId => itemId == id));
 
-						collection.Upsert(cart);
-					}
-				});
-			}
-		}
-	}
+        foreach (var cart in cartsToUpdate)
+        {
+            cart.Items.ForEach(item =>
+            {
+                if (item.Id == id)
+                {
+                    item.Price = price;
+                    item.Name = name;
+
+                    collection.Upsert(cart);
+                }
+            });
+        }
+    }
 }

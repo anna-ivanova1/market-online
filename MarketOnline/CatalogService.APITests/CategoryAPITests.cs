@@ -1,7 +1,8 @@
-using CatalogService.API.Models;
-using CatalogService.APITests;
 using System.Net;
 using System.Net.Http.Json;
+
+using CatalogService.API.Models;
+using CatalogService.APITests;
 
 namespace CatalogService.Tests.Integration
 {
@@ -32,7 +33,7 @@ namespace CatalogService.Tests.Integration
 			var response = await _client.GetAsync("/api/catalog-service/categories");
 
 			// Assert
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 			var categories = await response.Content.ReadFromJsonAsync<List<CategoryModel>>();
 			Assert.IsNotNull(categories);
 		}
@@ -47,10 +48,10 @@ namespace CatalogService.Tests.Integration
 			var response = await _client.GetAsync($"/api/catalog-service/categories/{testCategoryId}");
 
 			// Assert
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 			var category = await response.Content.ReadFromJsonAsync<CategoryModel>();
 			Assert.IsNotNull(category);
-			Assert.AreEqual(testCategoryId, category!.Id);
+			Assert.That(category!.Id, Is.EqualTo(testCategoryId));
 		}
 
 		[Test]
@@ -66,10 +67,10 @@ namespace CatalogService.Tests.Integration
 			var response = await _client.PostAsJsonAsync("/api/catalog-service/categories", newCategory);
 
 			// Assert
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 			var created = await response.Content.ReadFromJsonAsync<CategoryModel>();
 			Assert.IsNotNull(created);
-			Assert.AreEqual("Integration Category", created!.Name);
+			Assert.That(created!.Name, Is.EqualTo("Integration Category"));
 		}
 
 		[Test]
@@ -88,10 +89,10 @@ namespace CatalogService.Tests.Integration
 			var response = await _client.PutAsJsonAsync("/api/catalog-service/categories", updated);
 
 			// Assert
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 			var result = await response.Content.ReadFromJsonAsync<CategoryModel>();
 			Assert.IsNotNull(result);
-			Assert.AreEqual("Updated Name", result!.Name);
+			Assert.That(result!.Name, Is.EqualTo("Updated Name"));
 		}
 
 		[Test]
@@ -104,11 +105,11 @@ namespace CatalogService.Tests.Integration
 			var response = await _client.DeleteAsync($"/api/catalog-service/categories/{id}");
 
 			// Assert
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
 			// Optionally verify it's gone
 			var check = await _client.GetAsync($"/api/catalog-service/categories/{id}");
-			Assert.AreNotEqual(HttpStatusCode.OK, check.StatusCode); // Expect NotFound or InternalServerError
+			Assert.That(check.StatusCode, Is.Not.EqualTo(HttpStatusCode.OK)); // Expect NotFound or InternalServerError
 		}
 
 		private async Task<Guid> CreateTestCategoryAsync(string name)
